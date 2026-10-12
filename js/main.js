@@ -21,11 +21,11 @@ const applyTheme = theme => {
   document.documentElement.setAttribute("data-theme", theme);
 
   // Automatically switch the logo
-  document.querySelectorAll(".brand-logo").forEach(logo => {
-    logo.src = theme === "dark"
-      ? "images/logo-dark.png"
-      : "images/logo.png";
-  });
+document.querySelectorAll(".brand-logo").forEach(logo => {
+  logo.src = theme === "dark"
+    ? "/images/logo-dark.png"
+    : "/images/logo.png";
+});
 
   // Update the theme toggle accessibility labels
   if (themeToggle) {
