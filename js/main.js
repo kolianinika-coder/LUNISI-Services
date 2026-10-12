@@ -14,6 +14,27 @@
     }));
   }
 
+  // Persist the visitor's theme choice across pages and visits.
+  const themeToggle = document.querySelector(".theme-toggle");
+  const applyTheme = theme => {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (themeToggle) {
+      const dark = theme === "dark";
+      themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      themeToggle.setAttribute("title", dark ? "Switch to light mode" : "Switch to dark mode");
+    }
+  };
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem("lunisi-theme"); } catch (_) {}
+  applyTheme(savedTheme === "dark" ? "dark" : "light");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(nextTheme);
+      try { localStorage.setItem("lunisi-theme", nextTheme); } catch (_) {}
+    });
+  }
+
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
