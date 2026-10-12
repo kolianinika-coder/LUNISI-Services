@@ -16,14 +16,31 @@
 
   // Persist the visitor's theme choice across pages and visits.
   const themeToggle = document.querySelector(".theme-toggle");
-  const applyTheme = theme => {
-    document.documentElement.setAttribute("data-theme", theme);
-    if (themeToggle) {
-      const dark = theme === "dark";
-      themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
-      themeToggle.setAttribute("title", dark ? "Switch to light mode" : "Switch to dark mode");
-    }
-  };
+  
+const applyTheme = theme => {
+  document.documentElement.setAttribute("data-theme", theme);
+
+  // Automatically switch the logo
+  document.querySelectorAll(".brand-logo").forEach(logo => {
+    logo.src = theme === "dark"
+      ? "images/logo-dark.png"
+      : "images/logo.png";
+  });
+
+  // Update the theme toggle accessibility labels
+  if (themeToggle) {
+    const dark = theme === "dark";
+    themeToggle.setAttribute(
+      "aria-label",
+      dark ? "Switch to light mode" : "Switch to dark mode"
+    );
+    themeToggle.setAttribute(
+      "title",
+      dark ? "Switch to light mode" : "Switch to dark mode"
+    );
+  }
+};
+
   let savedTheme = null;
   try { savedTheme = localStorage.getItem("lunisi-theme"); } catch (_) {}
   applyTheme(savedTheme === "dark" ? "dark" : "light");
