@@ -44,3 +44,30 @@ html[data-theme="dark"] .primary-nav>a:not(.nav-cta):hover{color:#54d1c9}
 html[data-theme="dark"] .button-light{background:#edf5fa;color:#122b42}
 html[data-theme="dark"] .small-note{color:#9eafbd}
 @media(max-width:760px){.theme-toggle{margin-left:auto;margin-right:2px}.header-inner{gap:10px}html[data-theme="dark"] .primary-nav{background:#111b24;border-bottom-color:#344555;box-shadow:0 16px 24px rgba(0,0,0,.3)}html[data-theme="dark"] .primary-nav>a:not(.nav-cta){border-bottom-color:#263746}}
+
+
+/* Desktop header: place the theme toggle immediately to the right of the CTA.
+   Mobile layout is intentionally unchanged. */
+@media (min-width: 761px) {
+  .header-inner {
+    gap: 12px;
+  }
+
+  .brand {
+    order: 0;
+  }
+
+  .primary-nav {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .theme-toggle {
+    order: 2;
+    margin: 0;
+  }
+
+  .menu-toggle {
+    order: 3;
+  }
+}
