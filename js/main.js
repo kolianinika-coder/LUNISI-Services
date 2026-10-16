@@ -98,19 +98,18 @@
   }
 
   // =========================================
-  // QUOTE FORM
+  // QUOTE FORM ELEMENTS
   // =========================================
   const form = document.getElementById("quote-form");
 
+  // Other pages do not contain the quote form.
   if (!form) return;
 
   const status = document.getElementById("form-status");
   const submitButton = form.querySelector('button[type="submit"]');
   const serviceSelect = document.getElementById("service-select");
   const binOptions = document.getElementById("bin-options");
-
-  const photoUploadList =
-    document.getElementById("photo-upload-list");
+  const photoUploadList = document.getElementById("photo-upload-list");
 
   const MAX_PHOTOS = 5;
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -130,7 +129,7 @@
   };
 
   // =========================================
-  // PRESELECT SERVICE FROM URL
+  // SERVICE PRESELECTION AND BIN OPTIONS
   // =========================================
   if (serviceSelect) {
     const params = new URLSearchParams(window.location.search);
@@ -164,34 +163,32 @@
   }
 
   // =========================================
-  // DYNAMIC PHOTO FIELDS (+ / -)
+  // PHOTO UPLOAD FIELDS (+ / -)
   // =========================================
-  const getPhotoInputs = () => {
+  const getPhotoRows = () => {
     if (!photoUploadList) return [];
 
     return Array.from(
-      photoUploadList.querySelectorAll('input[type="file"]')
+      photoUploadList.querySelectorAll(".photo-upload-row")
     );
   };
 
+  const getPhotoInputs = () =>
+    getPhotoRows()
+      .map(row => row.querySelector('input[type="file"]'))
+      .filter(Boolean);
+
   const renumberPhotoInputs = () => {
-    if (!photoUploadList) return;
-
-    const rows = Array.from(
-      photoUploadList.querySelectorAll(".photo-upload-row")
-    );
-
-    rows.forEach((row, index) => {
-      const input = row.querySelector('input[type="file"]');
+    getPhotoRows().forEach((row, index) => {
       const number = index + 1;
+      const input = row.querySelector('input[type="file"]');
+      const label = row.querySelector("label");
 
       if (input) {
-        input.name = `photo_${number}`;
         input.id = `photo-${number}`;
+        input.name = `photo_${number}`;
         input.accept = "image/jpeg,image/png,image/webp";
       }
-
-      const label = row.querySelector("label");
 
       if (label && input) {
         label.htmlFor = input.id;
@@ -210,27 +207,27 @@
   };
 
   const updatePhotoButtons = () => {
-    if (!photoUploadList) return;
-
-    const rows = Array.from(
-      photoUploadList.querySelectorAll(".photo-upload-row")
-    );
+    const rows = getPhotoRows();
 
     rows.forEach((row, index) => {
-      const addButton =
-        row.querySelector(".add-photo-button");
+      const input = row.querySelector('input[type="file"]');
+      const addButton = row.querySelector(".add-photo-button");
+      const removeButton = row.querySelector(".remove-photo-button");
 
-      const removeButton =
-        row.querySelector(".remove-photo-button");
+      // Show the first field and any field with a selected photo.
+      row.hidden = index > 0 && !input?.files?.length;
 
+      // The plus button appears only on the last visible field.
       if (addButton) {
         addButton.hidden =
-          index !== rows.length - 1 ||
+          row.hidden ||
+          index !== rows.filter(item => !item.hidden).length - 1 ||
           rows.length >= MAX_PHOTOS;
       }
 
+      // The first photo field cannot be removed.
       if (removeButton) {
-        removeButton.hidden = rows.length <= 1;
+        removeButton.hidden = index === 0 || row.hidden;
       }
     });
   };
@@ -241,11 +238,11 @@
       .filter(Boolean);
 
     if (files.length > MAX_PHOTOS) {
-      return "You can upload a maximum of 5 photos.";
+      return "Please upload a maximum of 5 photos.";
     }
 
     if (files.some(file => !allowedTypes.includes(file.type))) {
-      return "Please upload JPG, PNG, or WebP images only.";
+      return "Please use JPG, PNG, or WebP images only.";
     }
 
     if (files.some(file => file.size > MAX_FILE_SIZE)) {
@@ -265,76 +262,92 @@
   };
 
   if (photoUploadList) {
-    // Make sure the first field has the correct structure.
-    let rows = Array.from(
-      photoUploadList.querySelectorAll(".photo-upload-row")
-    );
+    const initialRows = getPhotoRows();
 
-    if (rows.length === 0) {
-      const firstInput =
-        photoUploadList.querySelector('input[type="file"]');
+    // Ensure the initial HTML has the expected five rows.
+    // The additional rows remain hidden until needed.
+    if (initialRows.length > 0) {
+      initialRows.forEach((row, index) => {
+        if (index > 0) {
+          row.hidden = true;
+        }
 
-      if (firstInput) {
-        const row = document.createElement("div");
-        row.className = "photo-upload-row";
+        const input = row.querySelector('input[type="file"]');
 
-        firstInput.parentNode.insertBefore(row, firstInput);
-        row.appendChild(firstInput);
+        if (input) {
+          input.accept = "image/jpeg,image/png,image/webp";
+        }
 
-        const addButton = document.createElement("button");
-        addButton.type = "button";
-        addButton.className = "add-photo-button";
-        addButton.textContent = "+";
-        addButton.setAttribute("aria-label", "Add another photo");
+        // Make sure each row has its own remove button.
+        if (
+          index > 0 &&
+          !row.querySelector(".remove-photo-button")
+        ) {
+          const remove = document.createElement("button");
 
-        row.appendChild(addButton);
-      }
+          remove.type = "button";
+          remove.className = "remove-photo-button";
+          remove.textContent = "−";
+          remove.setAttribute("aria-label", "Remove photo");
+          remove.title = "Remove photo";
+
+          row.appendChild(remove);
+        }
+      });
+
+      renumberPhotoInputs();
+      updatePhotoButtons();
     }
 
     photoUploadList.addEventListener("click", event => {
-      const addButton =
-        event.target.closest(".add-photo-button");
-
-      const removeButton =
-        event.target.closest(".remove-photo-button");
+      const addButton = event.target.closest(".add-photo-button");
+      const removeButton = event.target.closest(".remove-photo-button");
 
       if (addButton) {
-        const currentRows =
-          photoUploadList.querySelectorAll(".photo-upload-row");
+        const rows = getPhotoRows();
+        const visibleRows = rows.filter(row => !row.hidden);
 
-        if (currentRows.length >= MAX_PHOTOS) return;
+        if (visibleRows.length >= MAX_PHOTOS) {
+          showStatus("You can upload a maximum of 5 photos.", "error");
+          return;
+        }
 
-        const row = document.createElement("div");
-        row.className = "photo-upload-row";
+        // Prefer revealing the next pre-existing Netlify field.
+        const nextRow = rows.find(row => row.hidden);
 
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = "image/jpeg,image/png,image/webp";
+        if (nextRow) {
+          nextRow.hidden = false;
+          renumberPhotoInputs();
+          updatePhotoButtons();
 
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "remove-photo-button";
-        remove.textContent = "−";
-        remove.setAttribute("aria-label", "Remove photo");
+          const input = nextRow.querySelector('input[type="file"]');
 
-        const add = document.createElement("button");
-        add.type = "button";
-        add.className = "add-photo-button";
-        add.textContent = "+";
-        add.setAttribute("aria-label", "Add another photo");
+          if (input) input.focus();
 
-        row.append(input, remove, add);
-        photoUploadList.appendChild(row);
+          showStatus("");
+        }
 
-        renumberPhotoInputs();
-        updatePhotoButtons();
-        showStatus("");
+        return;
       }
 
       if (removeButton) {
         const row = removeButton.closest(".photo-upload-row");
 
-        if (row) row.remove();
+        if (!row) return;
+
+        const input = row.querySelector('input[type="file"]');
+
+        if (input) {
+          input.value = "";
+        }
+
+        // Keep the field in the HTML for Netlify.
+        // Hide it rather than deleting it.
+        const rowIndex = getPhotoRows().indexOf(row);
+
+        if (rowIndex > 0) {
+          row.hidden = true;
+        }
 
         renumberPhotoInputs();
         updatePhotoButtons();
@@ -353,14 +366,13 @@
       } else {
         showStatus("");
       }
-    });
 
-    renumberPhotoInputs();
-    updatePhotoButtons();
+      updatePhotoButtons();
+    });
   }
 
   // =========================================
-  // SUBMIT FORM TO NETLIFY FORMS
+  // NETLIFY FORMS SUBMISSION
   // =========================================
   form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -374,8 +386,6 @@
       return;
     }
 
-    showStatus("");
-
     const originalButtonHTML = submitButton
       ? submitButton.innerHTML
       : "";
@@ -385,12 +395,18 @@
       submitButton.textContent = "Sending...";
     }
 
+    showStatus("");
+
     try {
       const formData = new FormData(form);
 
-      // Required by Netlify Forms.
-      formData.set("form-name", form.getAttribute("name") || "quote-request");
+      // Netlify Forms requires this field.
+      formData.set(
+        "form-name",
+        form.getAttribute("name") || "quote-request"
+      );
 
+      // Submit multipart form data without manually setting Content-Type.
       const response = await fetch("/", {
         method: "POST",
         body: formData
@@ -413,13 +429,15 @@
         binOptions.hidden = true;
       }
 
-      // Keep one photo field after successful submission.
+      // Reset photo fields to one visible upload row.
       if (photoUploadList) {
-        const rows = Array.from(
-          photoUploadList.querySelectorAll(".photo-upload-row")
-        );
+        getPhotoRows().forEach((row, index) => {
+          row.hidden = index > 0;
 
-        rows.slice(1).forEach(row => row.remove());
+          const input = row.querySelector('input[type="file"]');
+
+          if (input) input.value = "";
+        });
 
         renumberPhotoInputs();
         updatePhotoButtons();
@@ -429,7 +447,7 @@
 
       showStatus(
         error.message ||
-          "Something went wrong. Please try again.",
+          "Something went wrong. Please try again or contact us directly.",
         "error"
       );
     } finally {
