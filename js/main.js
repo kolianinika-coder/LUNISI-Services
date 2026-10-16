@@ -98,11 +98,10 @@
   }
 
   // =========================================
-  // QUOTE FORM ELEMENTS
+  // QUOTE FORM
   // =========================================
   const form = document.getElementById("quote-form");
 
-  // Other pages do not contain the quote form.
   if (!form) return;
 
   const status = document.getElementById("form-status");
@@ -129,7 +128,7 @@
   };
 
   // =========================================
-  // SERVICE PRESELECTION AND BIN OPTIONS
+  // SERVICE PRESELECTION
   // =========================================
   if (serviceSelect) {
     const params = new URLSearchParams(window.location.search);
@@ -163,7 +162,7 @@
   }
 
   // =========================================
-  // PHOTO UPLOAD FIELDS (+ / -)
+  // PHOTO UPLOAD HELPERS
   // =========================================
   const getPhotoRows = () => {
     if (!photoUploadList) return [];
@@ -208,24 +207,21 @@
 
   const updatePhotoButtons = () => {
     const rows = getPhotoRows();
+    const visibleRows = rows.filter(row => !row.hidden);
+    const lastVisibleRow = visibleRows[visibleRows.length - 1];
 
     rows.forEach((row, index) => {
-      const input = row.querySelector('input[type="file"]');
       const addButton = row.querySelector(".add-photo-button");
       const removeButton = row.querySelector(".remove-photo-button");
 
-      // Show the first field and any field with a selected photo.
-      row.hidden = index > 0 && !input?.files?.length;
-
-      // The plus button appears only on the last visible field.
       if (addButton) {
         addButton.hidden =
-          row.hidden ||
-          index !== rows.filter(item => !item.hidden).length - 1 ||
-          rows.length >= MAX_PHOTOS;
+          row !== lastVisibleRow || rows.length < MAX_PHOTOS &&
+          visibleRows.length >= MAX_PHOTOS;
+        addButton.hidden =
+          row !== lastVisibleRow || visibleRows.length >= MAX_PHOTOS;
       }
 
-      // The first photo field cannot be removed.
       if (removeButton) {
         removeButton.hidden = index === 0 || row.hidden;
       }
@@ -261,59 +257,52 @@
     return "";
   };
 
+  // =========================================
+  // INITIALIZE PHOTO FIELDS
+  // =========================================
   if (photoUploadList) {
-    const initialRows = getPhotoRows();
+    const rows = getPhotoRows();
 
-    // Ensure the initial HTML has the expected five rows.
-    // The additional rows remain hidden until needed.
-    if (initialRows.length > 0) {
-      initialRows.forEach((row, index) => {
-        if (index > 0) {
-          row.hidden = true;
-        }
+    rows.forEach((row, index) => {
+      // Start with only the first row visible.
+      row.hidden = index > 0;
 
-        const input = row.querySelector('input[type="file"]');
+      const input = row.querySelector('input[type="file"]');
 
-        if (input) {
-          input.accept = "image/jpeg,image/png,image/webp";
-        }
+      if (input) {
+        input.accept = "image/jpeg,image/png,image/webp";
+      }
 
-        // Make sure each row has its own remove button.
-        if (
-          index > 0 &&
-          !row.querySelector(".remove-photo-button")
-        ) {
-          const remove = document.createElement("button");
+      if (index > 0 && !row.querySelector(".remove-photo-button")) {
+        const remove = document.createElement("button");
 
-          remove.type = "button";
-          remove.className = "remove-photo-button";
-          remove.textContent = "−";
-          remove.setAttribute("aria-label", "Remove photo");
-          remove.title = "Remove photo";
+        remove.type = "button";
+        remove.className = "remove-photo-button";
+        remove.textContent = "−";
+        remove.setAttribute("aria-label", "Remove photo");
+        remove.title = "Remove photo";
 
-          row.appendChild(remove);
-        }
-      });
+        row.appendChild(remove);
+      }
+    });
 
-      renumberPhotoInputs();
-      updatePhotoButtons();
-    }
+    renumberPhotoInputs();
+    updatePhotoButtons();
 
     photoUploadList.addEventListener("click", event => {
       const addButton = event.target.closest(".add-photo-button");
       const removeButton = event.target.closest(".remove-photo-button");
 
       if (addButton) {
-        const rows = getPhotoRows();
-        const visibleRows = rows.filter(row => !row.hidden);
+        const currentRows = getPhotoRows();
+        const visibleRows = currentRows.filter(row => !row.hidden);
 
         if (visibleRows.length >= MAX_PHOTOS) {
           showStatus("You can upload a maximum of 5 photos.", "error");
           return;
         }
 
-        // Prefer revealing the next pre-existing Netlify field.
-        const nextRow = rows.find(row => row.hidden);
+        const nextRow = currentRows.find(row => row.hidden);
 
         if (nextRow) {
           nextRow.hidden = false;
@@ -341,11 +330,11 @@
           input.value = "";
         }
 
-        // Keep the field in the HTML for Netlify.
-        // Hide it rather than deleting it.
-        const rowIndex = getPhotoRows().indexOf(row);
+        const rows = getPhotoRows();
+        const index = rows.indexOf(row);
 
-        if (rowIndex > 0) {
+        // Keep the original first field.
+        if (index > 0) {
           row.hidden = true;
         }
 
@@ -372,7 +361,7 @@
   }
 
   // =========================================
-  // NETLIFY FORMS SUBMISSION
+  // SUBMIT TO NETLIFY FORMS
   // =========================================
   form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -400,13 +389,11 @@
     try {
       const formData = new FormData(form);
 
-      // Netlify Forms requires this field.
       formData.set(
         "form-name",
         form.getAttribute("name") || "quote-request"
       );
 
-      // Submit multipart form data without manually setting Content-Type.
       const response = await fetch("/", {
         method: "POST",
         body: formData
@@ -429,19 +416,19 @@
         binOptions.hidden = true;
       }
 
-      // Reset photo fields to one visible upload row.
-      if (photoUploadList) {
-        getPhotoRows().forEach((row, index) => {
-          row.hidden = index > 0;
+      // Return to one visible photo field.
+      getPhotoRows().forEach((row, index) => {
+        row.hidden = index > 0;
 
-          const input = row.querySelector('input[type="file"]');
+        const input = row.querySelector('input[type="file"]');
 
-          if (input) input.value = "";
-        });
+        if (input) {
+          input.value = "";
+        }
+      });
 
-        renumberPhotoInputs();
-        updatePhotoButtons();
-      }
+      renumberPhotoInputs();
+      updatePhotoButtons();
     } catch (error) {
       console.error("Quote submission failed:", error);
 
