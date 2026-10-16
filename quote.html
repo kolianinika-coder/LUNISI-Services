@@ -9,7 +9,7 @@
   <title>Get a Free Quote | LUNISI Services</title>
   <meta name="description" content="Request a quote for house cleaning, driveway cleaning, junk removal, or trash bin cleaning in Wayne, NJ.">
 
-  <!-- Replace this URL with your real domain -->
+  <!-- Replace with your real domain when ready -->
   <link rel="canonical" href="https://YOUR-DOMAIN.com/quote.html">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -29,6 +29,7 @@
           <circle cx="12" cy="12" r="4"></circle>
           <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
         </svg>
+
         <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"></path>
         </svg>
@@ -36,7 +37,9 @@
 
       <button class="menu-toggle" aria-expanded="false"
         aria-controls="primary-nav" aria-label="Open navigation">
-        <span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
       <nav class="primary-nav" id="primary-nav">
@@ -54,7 +57,9 @@
       <div class="container">
         <p class="eyebrow">GET A FREE QUOTE</p>
         <h1>Tell us what you<br><span>need taken care of.</span></h1>
-        <p>Share a few details about your project. We’ll review your request and follow up.</p>
+        <p>
+          Share a few details about your project. We’ll review your request and follow up.
+        </p>
       </div>
     </section>
 
@@ -63,6 +68,7 @@
 
         <div class="quote-sidebar">
           <h2>Let’s talk about your project.</h2>
+
           <p>
             House cleaning and driveway cleaning are quoted individually.
             For junk removal, photos help us understand the items and scope.
@@ -97,30 +103,49 @@
 
             <label>
               Full Name *
-              <input name="name" autocomplete="name" required
-                placeholder="Your name">
+              <input
+                name="name"
+                autocomplete="name"
+                required
+                placeholder="Your name"
+              >
             </label>
 
             <label>
               Phone Number *
-              <input name="phone" type="tel" autocomplete="tel" required
-                placeholder="(555) 123-4567">
+              <input
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                required
+                placeholder="(555) 123-4567"
+              >
             </label>
 
             <label>
               Email Address *
-              <input name="email" type="email" autocomplete="email" required
-                placeholder="you@example.com">
+              <input
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="you@example.com"
+              >
             </label>
 
             <label>
               Service Address *
-              <input name="address" autocomplete="street-address" required
-                placeholder="Street address, city, ZIP">
+              <input
+                name="address"
+                autocomplete="street-address"
+                required
+                placeholder="Street address, city, ZIP"
+              >
             </label>
 
             <label class="form-full">
               Which service do you need? *
+
               <select name="service" id="service-select" required>
                 <option value="">Select a service</option>
                 <option value="House Cleaning">House Cleaning</option>
@@ -146,42 +171,79 @@
 
             <label class="form-full">
               Tell us about the job *
-              <textarea name="details" required rows="5"
-                placeholder="What would you like us to know?"></textarea>
+
+              <textarea
+                name="details"
+                required
+                rows="5"
+                placeholder="What would you like us to know?"
+              ></textarea>
             </label>
 
+            <!-- Photo upload -->
+            <div class="form-full upload-label">
+              <label for="photo-1">
+                Upload photos (optional, recommended for Junk Removal)
+              </label>
 
-            
+              <div id="photo-upload-list">
 
+                <!-- First visible upload field -->
+                <div class="photo-upload-row">
+                  <input
+                    type="file"
+                    id="photo-1"
+                    name="photo_1"
+                    accept="image/jpeg,image/png,image/webp"
+                  >
 
-<div class="form-full upload-label">
-  <label for="photo-1">Upload photos (optional, recommended for Junk Removal)</label>
+                  <button
+                    type="button"
+                    class="add-photo-button"
+                    aria-label="Add another photo"
+                    title="Add another photo"
+                  >+</button>
 
-  <div id="photo-upload-list">
-    <div class="photo-upload-row">
-      <input
-        type="file"
-        id="photo-1"
-        name="photo_1"
-        accept="image/jpeg,image/png,image/webp"
-      >
-      <button
-        type="button"
-        class="add-photo-button"
-        id="add-photo-button"
-        aria-label="Add another photo"
-        title="Add another photo"
-      >+</button>
-    </div>
-  </div>
+                  <button
+                    type="button"
+                    class="remove-photo-button"
+                    aria-label="Remove photo"
+                    title="Remove photo"
+                    hidden
+                  >−</button>
+                </div>
 
-  <small>JPG, PNG, or WebP. Maximum 5 photos, 5 MB each.</small>
-</div>
+                <!-- Additional fields are registered in the form HTML.
+                     JavaScript reveals these as needed. -->
+                <div class="photo-upload-row" hidden>
+                  <input type="file" id="photo-2" name="photo_2" accept="image/jpeg,image/png,image/webp">
+                  <button type="button" class="add-photo-button" aria-label="Add another photo">+</button>
+                  <button type="button" class="remove-photo-button" aria-label="Remove photo">−</button>
+                </div>
 
+                <div class="photo-upload-row" hidden>
+                  <input type="file" id="photo-3" name="photo_3" accept="image/jpeg,image/png,image/webp">
+                  <button type="button" class="add-photo-button" aria-label="Add another photo">+</button>
+                  <button type="button" class="remove-photo-button" aria-label="Remove photo">−</button>
+                </div>
 
-            
+                <div class="photo-upload-row" hidden>
+                  <input type="file" id="photo-4" name="photo_4" accept="image/jpeg,image/png,image/webp">
+                  <button type="button" class="add-photo-button" aria-label="Add another photo">+</button>
+                  <button type="button" class="remove-photo-button" aria-label="Remove photo">−</button>
+                </div>
 
-              <small>JPG, PNG, or WebP. Maximum 5 photos, 5 MB each.</small>
+                <div class="photo-upload-row" hidden>
+                  <input type="file" id="photo-5" name="photo_5" accept="image/jpeg,image/png,image/webp">
+                  <button type="button" class="add-photo-button" aria-label="Add another photo">+</button>
+                  <button type="button" class="remove-photo-button" aria-label="Remove photo">−</button>
+                </div>
+
+              </div>
+
+              <small>
+                JPG, PNG, or WebP. Maximum 5 photos, 5 MB each.
+              </small>
             </div>
 
             <label class="consent form-full">
@@ -197,8 +259,12 @@
                 Send Quote Request <span>→</span>
               </button>
 
-              <p class="form-status" id="form-status"
-                role="status" aria-live="polite"></p>
+              <p
+                class="form-status"
+                id="form-status"
+                role="status"
+                aria-live="polite"
+              ></p>
             </div>
 
           </div>
