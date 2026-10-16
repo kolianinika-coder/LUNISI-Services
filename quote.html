@@ -1,12 +1,224 @@
+
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#122b42"><title>Get a Free Quote | LUNISI Services</title><meta name="description" content="Request a quote for house cleaning, driveway cleaning, junk removal, or trash bin cleaning in Wayne, NJ."><link rel="canonical" href="https://www.example.com/quote.html"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="stylesheet" href="css/style.css"></head><body>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="index.html"><img class="brand-logo" src="images/logo.png" alt="LUNISI Services"></a><button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode"><svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg><svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"></path></svg></button><button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="primary-nav" id="primary-nav"><a href="index.html">Home</a><a href="services.html">Services</a><a href="before-after.html">Our Work</a><a href="about.html">About</a><a href="service-areas.html">Service Areas</a></nav></div></header>
-<main id="main"><section class="page-hero"><div class="container"><p class="eyebrow">GET A FREE QUOTE</p><h1>Tell us what you<br><span>need taken care of.</span></h1><p>Share a few details about your project. We’ll review your request and follow up.</p></div></section><section class="section quote-section"><div class="container quote-layout"><div class="quote-sidebar"><h2>Let’s talk about your project.</h2><p>House cleaning and driveway cleaning are quoted individually. For junk removal, photos help us understand the items and scope.</p><div class="quote-side-note"><span>✦</span><p><strong>Trash Bin Cleaning</strong><br>1 bin — $25<br>3 bins — $60</p></div><p class="small-note">Email and SMS notifications require configuration before the form can send live requests.</p></div>
-<form class="quote-form" id="quote-form" action="/.netlify/functions/submit-quote" method="POST" enctype="multipart/form-data">
-<div class="form-grid"><label>Full Name *<input name="name" autocomplete="name" required placeholder="Your name"></label><label>Phone Number *<input name="phone" type="tel" autocomplete="tel" required placeholder="(555) 123-4567"></label><label>Email Address *<input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>Service Address *<input name="address" autocomplete="street-address" required placeholder="Street address, city, ZIP"></label>
-<label class="form-full">Which service do you need? *<select name="service" id="service-select" required><option value="">Select a service</option><option value="House Cleaning">House Cleaning</option><option value="Driveway Cleaning">Driveway Cleaning</option><option value="Junk Removal">Junk Removal</option><option value="Trash Bin Cleaning">Trash Bin Cleaning</option></select></label>
-<div class="bin-options form-full" id="bin-options" hidden><span class="field-label">Number of bins</span><label class="radio-card"><input type="radio" name="bins" value="1 bin — $25"> 1 bin — $25</label><label class="radio-card"><input type="radio" name="bins" value="3 bins — $60"> 3 bins — $60</label></div>
-<label class="form-full">Tell us about the job *<textarea name="details" required rows="5" placeholder="What would you like us to know?"></textarea></label>
-<label class="form-full upload-label">Upload photos (optional, recommended for Junk Removal)<input type="file" name="photos" id="photos" accept="image/jpeg,image/png,image/webp" multiple><small>JPG, PNG, or WebP. Keep files small. Maximum 5 photos, 5 MB each.</small></label>
-<label class="consent form-full"><input type="checkbox" name="consent" required><span>I agree to be contacted about this service request by phone, email, or SMS.</span></label>
-<div class="form-full"><button class="button button-primary submit-button" type="submit">Send Quote Request <span>→</span></button><p class="form-status" id="form-status" role="status" aria-live="polite"></p><p class="small-note">This form is not live until the Netlify Function and email/SMS provider credentials are configured.</p></div></div></form></div></section></main><footer class="site-footer"><div class="container footer-bottom"><span>© <span id="year"></span> LUNISI Services</span><a href="privacy-policy.html">Privacy Policy</a></div></footer><script src="js/main.js" defer></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#122b42">
+
+  <title>Get a Free Quote | LUNISI Services</title>
+  <meta name="description" content="Request a quote for house cleaning, driveway cleaning, junk removal, or trash bin cleaning in Wayne, NJ.">
+
+  <!-- Replace this URL with your real domain -->
+  <link rel="canonical" href="https://YOUR-DOMAIN.com/quote.html">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="images/logo.png" alt="LUNISI Services">
+      </a>
+
+      <button class="theme-toggle" type="button"
+        aria-label="Switch to dark mode" title="Switch to dark mode">
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.7 8.7 0 1 0 20.5 14.2Z"></path>
+        </svg>
+      </button>
+
+      <button class="menu-toggle" aria-expanded="false"
+        aria-controls="primary-nav" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="primary-nav" id="primary-nav">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="before-after.html">Our Work</a>
+        <a href="about.html">About</a>
+        <a href="service-areas.html">Service Areas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">GET A FREE QUOTE</p>
+        <h1>Tell us what you<br><span>need taken care of.</span></h1>
+        <p>Share a few details about your project. We’ll review your request and follow up.</p>
+      </div>
+    </section>
+
+    <section class="section quote-section">
+      <div class="container quote-layout">
+
+        <div class="quote-sidebar">
+          <h2>Let’s talk about your project.</h2>
+          <p>
+            House cleaning and driveway cleaning are quoted individually.
+            For junk removal, photos help us understand the items and scope.
+          </p>
+
+          <div class="quote-side-note">
+            <span>✦</span>
+            <p>
+              <strong>Trash Bin Cleaning</strong><br>
+              1 bin — $25<br>
+              3 bins — $60
+            </p>
+          </div>
+
+          <p class="small-note">
+            Submit your request and our team will follow up with you.
+          </p>
+        </div>
+
+        <form
+          class="quote-form"
+          id="quote-form"
+          name="quote-request"
+          method="POST"
+          action="/"
+          data-netlify="true"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" name="form-name" value="quote-request">
+
+          <div class="form-grid">
+
+            <label>
+              Full Name *
+              <input name="name" autocomplete="name" required
+                placeholder="Your name">
+            </label>
+
+            <label>
+              Phone Number *
+              <input name="phone" type="tel" autocomplete="tel" required
+                placeholder="(555) 123-4567">
+            </label>
+
+            <label>
+              Email Address *
+              <input name="email" type="email" autocomplete="email" required
+                placeholder="you@example.com">
+            </label>
+
+            <label>
+              Service Address *
+              <input name="address" autocomplete="street-address" required
+                placeholder="Street address, city, ZIP">
+            </label>
+
+            <label class="form-full">
+              Which service do you need? *
+              <select name="service" id="service-select" required>
+                <option value="">Select a service</option>
+                <option value="House Cleaning">House Cleaning</option>
+                <option value="Driveway Cleaning">Driveway Cleaning</option>
+                <option value="Junk Removal">Junk Removal</option>
+                <option value="Trash Bin Cleaning">Trash Bin Cleaning</option>
+              </select>
+            </label>
+
+            <div class="bin-options form-full" id="bin-options" hidden>
+              <span class="field-label">Number of bins</span>
+
+              <label class="radio-card">
+                <input type="radio" name="bins" value="1 bin — $25">
+                1 bin — $25
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="bins" value="3 bins — $60">
+                3 bins — $60
+              </label>
+            </div>
+
+            <label class="form-full">
+              Tell us about the job *
+              <textarea name="details" required rows="5"
+                placeholder="What would you like us to know?"></textarea>
+            </label>
+
+            <div class="form-full upload-label">
+              <span class="field-label">
+                Upload photos (optional, recommended for Junk Removal)
+              </span>
+
+              <label>
+                Photo 1
+                <input type="file" name="photo_1"
+                  accept="image/jpeg,image/png,image/webp">
+              </label>
+
+              <label>
+                Photo 2
+                <input type="file" name="photo_2"
+                  accept="image/jpeg,image/png,image/webp">
+              </label>
+
+              <label>
+                Photo 3
+                <input type="file" name="photo_3"
+                  accept="image/jpeg,image/png,image/webp">
+              </label>
+
+              <label>
+                Photo 4
+                <input type="file" name="photo_4"
+                  accept="image/jpeg,image/png,image/webp">
+              </label>
+
+              <label>
+                Photo 5
+                <input type="file" name="photo_5"
+                  accept="image/jpeg,image/png,image/webp">
+              </label>
+
+              <small>JPG, PNG, or WebP. Maximum 5 photos, 5 MB each.</small>
+            </div>
+
+            <label class="consent form-full">
+              <input type="checkbox" name="consent" value="Yes" required>
+              <span>
+                I agree to be contacted about this service request by phone,
+                email, or SMS.
+              </span>
+            </label>
+
+            <div class="form-full">
+              <button class="button button-primary submit-button" type="submit">
+                Send Quote Request <span>→</span>
+              </button>
+
+              <p class="form-status" id="form-status"
+                role="status" aria-live="polite"></p>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <span>© <span id="year"></span> LUNISI Services</span>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
