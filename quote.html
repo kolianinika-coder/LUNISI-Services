@@ -153,14 +153,31 @@
 
             
 
-<label class="form-full upload-label">
-  Upload photo (test)
-  <input
-    type="file"
-    name="photo_1"
-    accept="image/jpeg,image/png,image/webp"
-  >
-</label>
+
+<div class="form-full upload-label">
+  <label for="photo-1">Upload photos (optional, recommended for Junk Removal)</label>
+
+  <div id="photo-upload-list">
+    <div class="photo-upload-row">
+      <input
+        type="file"
+        id="photo-1"
+        name="photo_1"
+        accept="image/jpeg,image/png,image/webp"
+      >
+      <button
+        type="button"
+        class="add-photo-button"
+        id="add-photo-button"
+        aria-label="Add another photo"
+        title="Add another photo"
+      >+</button>
+    </div>
+  </div>
+
+  <small>JPG, PNG, or WebP. Maximum 5 photos, 5 MB each.</small>
+</div>
+
 
             
 
