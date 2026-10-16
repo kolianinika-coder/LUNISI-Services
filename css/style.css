@@ -71,3 +71,44 @@ html[data-theme="dark"] .small-note{color:#9eafbd}
     order: 3;
   }
 }
+
+
+.photo-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.photo-upload-row input[type="file"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-photo-button,
+.remove-photo-button {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border: 0;
+  border-radius: 10px;
+  background: #19a7a1;
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.remove-photo-button {
+  background: #e8eeee;
+  color: #263746;
+}
+
+.add-photo-button:hover {
+  background: #138c87;
+}
+
+.remove-photo-button:hover {
+  background: #d5dfdf;
+}
+
