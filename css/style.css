@@ -112,3 +112,7 @@ html[data-theme="dark"] .small-note{color:#9eafbd}
   background: #d5dfdf;
 }
 
+/* Hide additional photo fields until needed */
+#photo-upload-list .photo-upload-row[hidden] {
+  display: none !important;
+}
